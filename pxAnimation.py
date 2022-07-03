@@ -12,28 +12,25 @@ from math import sin, pow, pi
 from .clock import each_tick, unschedule
 from .spellcheck import suggest
 
-TWEEN_FUNCTIONS = {}
+####################### tweeners #########################
 
+TWEEN_FUNCTIONS = {}
 
 def tweener(f):
     TWEEN_FUNCTIONS[f.__name__] = f
     return f
 
-
 @tweener
 def linear(n):
     return n
-
 
 @tweener
 def accelerate(n):
     return n * n
 
-
 @tweener
 def decelerate(n):
     return -1.0 * n * (n - 2.0)
-
 
 @tweener
 def accel_decel(n):
@@ -42,7 +39,6 @@ def accel_decel(n):
         return 0.5 * p * p
     p -= 1.0
     return -0.5 * (p * (p - 2.0) - 1.0)
-
 
 @tweener
 def in_elastic(n):
@@ -54,7 +50,6 @@ def in_elastic(n):
     q -= 1.0
     return -(pow(2, 10 * q) * sin((q - s) * (2 * pi) / p))
 
-
 @tweener
 def out_elastic(n):
     p = .3
@@ -63,7 +58,6 @@ def out_elastic(n):
     if q == 1:
         return 1.0
     return pow(2, -10 * q) * sin((q - s) * (2 * pi) / p) + 1.0
-
 
 @tweener
 def in_out_elastic(n):
@@ -78,7 +72,6 @@ def in_out_elastic(n):
     else:
         q -= 1.0
         return pow(2, -10 * q) * sin((q - s) * (2.0 * pi) / p) * .5 + 1.0
-
 
 def _out_bounce_internal(t, d):
     p = t / d
@@ -98,16 +91,13 @@ def _out_bounce_internal(t, d):
 def _in_bounce_internal(t, d):
     return 1.0 - _out_bounce_internal(d - t, d)
 
-
 @tweener
 def bounce_end(n):
     return _out_bounce_internal(n, 1.)
 
-
 @tweener
 def bounce_start(n):
     return _in_bounce_internal(n, 1.)
-
 
 @tweener
 def bounce_start_end(n):
@@ -116,10 +106,8 @@ def bounce_start_end(n):
         return _in_bounce_internal(p, 1.) * .5
     return _out_bounce_internal(p - 1., 1.) * .5 + .5
 
-
 def tween(n, start, end):
     return start + (end - start) * n
-
 
 def tween_attr(n, start, end):
     if isinstance(start, tuple):
@@ -129,6 +117,8 @@ def tween_attr(n, start, end):
     else:
         return tween(n, start, end)
 
+################################################################# 
+####################### Animation class #########################
 
 class Animation:
     """An animation manager for object attribute animations.
@@ -243,7 +233,10 @@ class Animation:
         if not self.targets and stop:
             self.stop()
 
+####################### animate ~method #########################
 
 def animate(object, tween='linear', duration=1, on_finished=None, **targets):
-    return Animation(object, tween, duration, on_finished=on_finished,
-                     **targets)
+  return Animation(object, tween, duration, on_finished=on_finished,
+                   **targets)
+
+### end ###
