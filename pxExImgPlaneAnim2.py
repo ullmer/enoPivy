@@ -25,18 +25,18 @@ scene.addToParent(sg)
 
 def timerAnimCb(data, sensor):
   global scene, depthImgStack, direction
-  for i in range(depthImgStack): scene.nudge(i, [0, .01*i*direction, 0])
+  for i in range(depthImgStack): scene.nudge(i, [0, .03*i*direction, 0])
 
 def timerFlipCb(data, sensor):
   global direction
-  direction *= -1
+  direction *= -1; print("flip")
 
 sts1 = coin.SoTimerSensor(timerAnimCb, None)
-sts1.setInterval(.1) #Update position every 1/10 seconds
+sts1.setInterval(.05) #Update position every 1/10 seconds
 sts1.schedule()
 
 sts2 = coin.SoTimerSensor(timerFlipCb, None)
-sts2.setInterval(4)  #Flip animation direction every 2 seconds
+sts2.setInterval(2.)  #Flip animation every 2 seconds; note float required
 sts2.schedule()
 
 Gui.SendMsgToActiveView("ViewFit")
