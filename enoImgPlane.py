@@ -55,10 +55,12 @@ class pxImagePlane(pxNode):
 #################################################################
 ################# Enodia Coin ImagePlane Array (1D) #############
 
-class pxImagePlaneArray (pxNode):
-  cols      = None
-  autobuild = True
-  xoffset   = 1.1 
+class pxImagePlaneArray(pxNode):
+  cols       = None
+  autobuild  = True
+  offset     = [1.1, 0, 0]
+  imgPlanes  = None
+  planeTrans = None
   
   #################### constructor #####################
 
@@ -75,23 +77,20 @@ class pxImagePlaneArray (pxNode):
       print("pivyXi pxImagePlaneArray: cols need vals (%s)" % self.cols)
       return None
     
-    self.rowImagePlaneArrays = {}
+    self.imgPlanes  = {}
+    self.planeTrans = {}
 
-    for i in self.rows:
-      rowSep = new coin.SoSeparator()
-      self.rowSeparators[i] = rowSep
-      self.rowImagePlaneArrays = {}
+    for i in self.cols:
+      imgPlane = pxImagePlane() 
+      imgNode  = imgPlane.getNode()
+      imgTrans = coin.SbVec3f(self.offset)
 
-      for j in self.cols:
-        imgPlane = pxImagePlane() 
-        
-        
-    
-    children  = [self.imgTexture, self.imgCoord, self.faceset] 
+      if i != 0: self.addChild(imgTrans)
+      self.addChild(imgNode)
 
-    for child in children: self.node.addChild(child)
+      self.imgPlanes[i] = imgPlane
+      self.imgTrans[i]  = imgTrans
 
-### end ###
 
 #################################################################
 ################# Enodia Coin ImagePlane Grid (2D) ##############
