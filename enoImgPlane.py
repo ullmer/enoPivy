@@ -2,8 +2,8 @@
 # Brygg Ullmer, Clemson University
 # Begun 2022-07-02
 
-from pivy   import coin
-from pivyXi import *
+from pivy    import coin
+from enoPivy import *
 
 #################################################################
 #################### Enodia Coin ImagePlane #####################
@@ -13,6 +13,8 @@ class pxImagePlane(pxNode):
   faceset        = None
   imgFn          = None
   imgCoord       = None
+  normalObj      = None
+  normal         = [0, 0, 1.]
 
   #textureModel   = 'BLEND'
   textureModel   = 'MODULATE'
@@ -43,10 +45,13 @@ class pxImagePlane(pxNode):
     self.imgCoord              = coin.SoCoordinate3()
     self.imgCoord.point.setValues(self.facesetVals)
 
+    self.normalObj  = coin.SoNormal()
+    self.normalObj.normal.setValue(self.normal)
+
     self.faceset = coin.SoIndexedFaceSet()
     self.faceset.coordIndex.setValues(self.facesetIdxs)
 
-    children  = [self.imgTexture, self.imgCoord, self.faceset] 
+    children  = [self.imgTexture, self.imgCoord, self.normalObj, self.faceset] 
 
     for child in children: self.node.addChild(child)
 
@@ -74,7 +79,7 @@ class pxImagePlaneArray(pxNode):
 
   def buildArray(self):
     if self.rows not None: 
-      print("pivyXi pxImagePlaneArray: cols need vals (%s)" % self.cols)
+      print("enoPivy pxImagePlaneArray: cols need vals (%s)" % self.cols)
       return None
     
     self.imgPlanes  = {}
@@ -90,7 +95,6 @@ class pxImagePlaneArray(pxNode):
 
       self.imgPlanes[i] = imgPlane
       self.imgTrans[i]  = imgTrans
-
 
 #################################################################
 ################# Enodia Coin ImagePlane Grid (2D) ##############
@@ -116,7 +120,7 @@ class pxImagePlaneGrid(pxNode):
 
   def buildGrid(self):
     if self.rows not None or self.cols not None:
-      print("pivyXi pxImagePlaneGrid: rows and/or cols need vals (%s, %s)" % 
+      print("enoPivy pxImagePlaneGrid: rows and/or cols need vals (%s, %s)" % 
             (self.rows, self.cols))
       return None
     
