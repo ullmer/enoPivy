@@ -35,31 +35,34 @@ class enoImagePlane(pxNode):
   #################### build Image Plane #####################
 
   def buildImagePlane(self):
+    try:
+      self.imgTexture            = coin.SoTexture2()
 
-    self.imgTexture            = coin.SoTexture2()
-
-    if self.imgFn is not None: 
-      self.imgTexture.filename = self.imgFn
-
-    if self.transparency != 0:
-      self.
-
-    self.imgTexture.model      = self.textureModel
-
-    self.imgCoord              = coin.SoCoordinate3()
-    self.imgCoord.point.setValues(self.facesetVals)
-
-    self.normalObj  = coin.SoNormal()
-    self.normalObj.normal.setValue(self.normal)
-
-    self.faceset = coin.SoIndexedFaceSet()
-    self.faceset.coordIndex.setValues(self.facesetIdxs)
-
-    children  = [self.imgTexture, self.imgCoord, self.normalObj, self.faceset] 
-
-    for child in children: self.node.addChild(child)
-
-    return self.node
+      if self.imgFn is not None: 
+        self.imgTexture.filename = self.imgFn
+  
+      if self.transparency != 0:
+        self.
+  
+      self.imgTexture.model      = self.textureModel
+  
+      self.imgCoord              = coin.SoCoordinate3()
+      self.imgCoord.point.setValues(self.facesetVals)
+  
+      self.normalObj  = coin.SoNormal()
+      self.normalObj.normal.setValue(self.normal)
+  
+      self.faceset = coin.SoIndexedFaceSet()
+      self.faceset.coordIndex.setValues(self.facesetIdxs)
+  
+      children  = [self.imgTexture, self.imgCoord, self.normalObj, self.faceset] 
+  
+      for child in children: self.node.addChild(child)
+  
+      return self.node
+    except:
+      print("enoImagePlane buildImagePlane exception:"); traceback.print_exc()
+      return False
 
 #################################################################
 ################# Enodia Coin ImagePlane Array (1D) #############
@@ -82,23 +85,27 @@ class enoImagePlaneArray(pxNode):
   #################### build array #####################
 
   def buildArray(self):
-    if self.rows not None: 
-      print("enoPivy enoImagePlaneArray: cols need vals (%s)" % self.cols)
-      return None
-    
-    self.imgPlanes  = {}
-    self.planeTrans = {}
-
-    for i in self.cols:
-      imgPlane = enoImagePlane() 
-      imgNode  = imgPlane.getNode()
-      imgTrans = coin.SbVec3f(self.offset)
-
-      if i != 0: self.addChild(imgTrans)
-      self.addChild(imgNode)
-
-      self.imgPlanes[i] = imgPlane
-      self.imgTrans[i]  = imgTrans
+    try:
+      if self.rows not None: 
+        print("enoPivy enoImagePlaneArray: cols need vals (%s)" % self.cols)
+        return None
+      
+      self.imgPlanes  = {}
+      self.planeTrans = {}
+  
+      for i in self.cols:
+        imgPlane = enoImagePlane() 
+        imgNode  = imgPlane.getNode()
+        imgTrans = coin.SbVec3f(self.offset)
+  
+        if i != 0: self.addChild(imgTrans)
+        self.addChild(imgNode)
+  
+        self.imgPlanes[i] = imgPlane
+        self.imgTrans[i]  = imgTrans
+    except:
+      print("enoImagePlane buildArray exception:"); traceback.print_exc()
+      return False
 
 #################################################################
 ################# Enodia Coin ImagePlane Grid (2D) ##############
