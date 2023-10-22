@@ -65,6 +65,13 @@ class pxImagePlane(pxNode):
 #################################################################
 #################### Enodia Coin ImagePlane Grid ################
 
+class pxImagePlaneGrid(pxNode):
+  
+  #################### constructor #####################
+
+  def __init__(self, imgFn, **kwargs):
+    self.__dict__.update(kwargs) #allow class fields to be passed in constructor
+    #https://stackoverflow.com/questions/739625/setattr-with-kwargs-pythonic-or-not
 
 ################################################################
 #################### Enodia Coin translate #####################
