@@ -5,8 +5,8 @@
 from pivy import coin
 #sg = FreeCADGui.ActiveDocument.ActiveView.getSceneGraph()
 
-#################################################################
-#################### Enodia Coin ImagePlane #####################
+#######################################################
+#################### Pivy xi node #####################
 
 class pxNode:
   node   = None
@@ -44,12 +44,14 @@ class pxImagePlane(pxNode):
 
   def buildImagePlane(self, imgFn):
 
-    self.imgFn               = imgFn
-    self.imgTexture          = coin.SoTexture2()
-    self.imgTexture.filename = imgFn
-    self.imgTexture.model    = self.textureModel
+    self.imgFn                 = imgFn
+    self.imgTexture            = coin.SoTexture2()
 
-    self.imgCoord            = coin.SoCoordinate3()
+    if imgFn is not None: 
+      self.imgTexture.filename = imgFn
+    self.imgTexture.model      = self.textureModel
+
+    self.imgCoord              = coin.SoCoordinate3()
     self.imgCoord.point.setValues(self.facesetVals)
 
     self.faceset = coin.SoIndexedFaceSet()
@@ -66,12 +68,24 @@ class pxImagePlane(pxNode):
 #################### Enodia Coin ImagePlane Grid ################
 
 class pxImagePlaneGrid(pxNode):
+  rows      = None
+  cols      = None
+  autobuild = True
+  xoffset   = 1.1 
+  yoffset   = 1.1
   
   #################### constructor #####################
 
   def __init__(self, imgFn, **kwargs):
     self.__dict__.update(kwargs) #allow class fields to be passed in constructor
     #https://stackoverflow.com/questions/739625/setattr-with-kwargs-pythonic-or-not
+
+    if self.rows not None and self.cols not None and self.autobuild:
+      self.buildGrid()
+  
+  #################### build grid #####################
+
+  def buildGrid(self):
 
 ################################################################
 #################### Enodia Coin translate #####################
