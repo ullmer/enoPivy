@@ -9,11 +9,24 @@ from pivy import coin
 #################### Pivy xi node #####################
 
 class pxNode:
-  node   = None
+  nodeSeparator = None
+
+  #################### constructor #####################
+
+  def __init__(self, imgFn, **kwargs):
+    self.__dict__.update(kwargs) #allow class fields to be passed in constructor
+    #https://stackoverflow.com/questions/739625/setattr-with-kwargs-pythonic-or-not
+
+    self.initNodeSeparator()
+
+  #################### initialize node separator #####################
+
+  def initNodeSeparator(self): 
+    self.nodeSeparator = coin.SoSeparator()
 
   #################### getNode #####################
 
-  def getNode(self): return self.node
+  def getNode(self): return self.nodeSeparator
 
 #################################################################
 #################### Enodia Coin ImagePlane #####################
@@ -35,8 +48,7 @@ class pxImagePlane(pxNode):
   #################### constructor #####################
 
   def __init__(self, imgFn, **kwargs):
-    self.__dict__.update(kwargs) #allow class fields to be passed in constructor
-    #https://stackoverflow.com/questions/739625/setattr-with-kwargs-pythonic-or-not
+    super().__init__(kwargs)
 
     self.buildImagePlane(imgFn)
 
@@ -57,7 +69,6 @@ class pxImagePlane(pxNode):
     self.faceset = coin.SoIndexedFaceSet()
     self.faceset.coordIndex.setValues(self.facesetIdxs)
 
-    self.node = coin.SoSeparator()
     children  = [self.imgTexture, self.imgCoord, self.faceset] 
 
     for child in children: self.node.addChild(child)
@@ -73,12 +84,13 @@ class pxImagePlaneGrid(pxNode):
   autobuild = True
   xoffset   = 1.1 
   yoffset   = 1.1
+  rowSeparators       = None
+  rowImagePlaneArrays = None
   
   #################### constructor #####################
 
   def __init__(self, imgFn, **kwargs):
-    self.__dict__.update(kwargs) #allow class fields to be passed in constructor
-    #https://stackoverflow.com/questions/739625/setattr-with-kwargs-pythonic-or-not
+    super().__init__(kwargs)
 
     if self.rows not None and self.cols not None and self.autobuild:
       self.buildGrid()
@@ -86,6 +98,27 @@ class pxImagePlaneGrid(pxNode):
   #################### build grid #####################
 
   def buildGrid(self):
+    if self.rows not None or self.cols not None:
+      print("pivyXi pxImagePlaneGrid: rows and/or cols need vals (%s, %s)" % 
+            (self.rows, self.cols))
+      return None
+    
+    self.rowSeparators       = {}
+    self.rowImagePlaneArrays = {}
+
+    for i in self.rows:
+      rowSep = new coin.SoSeparator()
+      self.rowSeparators[i] = rowSep
+      self.rowImagePlaneArrays = {}
+
+      for j in self.cols:
+        imgPlane = pxImagePlane() 
+        
+        
+    
+    children  = [self.imgTexture, self.imgCoord, self.faceset] 
+
+    for child in children: self.node.addChild(child)
 
 ################################################################
 #################### Enodia Coin translate #####################
