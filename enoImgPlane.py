@@ -53,7 +53,22 @@ class pxImagePlane(pxNode):
     return self.node
 
 #################################################################
-#################### Enodia Coin ImagePlane Grid ################
+################# Enodia Coin ImagePlane Array (1D) #############
+
+class pxImagePlaneArray (pxNode):
+  cols      = None
+  autobuild = True
+  xoffset   = 1.1 
+  
+  #################### constructor #####################
+
+  def __init__(self, imgFn, **kwargs):
+    super().__init__(kwargs)
+
+    if self.cols not None and self.autobuild:
+
+#################################################################
+################# Enodia Coin ImagePlane Grid (2D) ##############
 
 class pxImagePlaneGrid(pxNode):
   rows      = None
@@ -61,9 +76,9 @@ class pxImagePlaneGrid(pxNode):
   autobuild = True
   xoffset   = 1.1 
   yoffset   = 1.1
-  rowSeparators       = None
+
   rowImagePlaneArrays = None
-  
+
   #################### constructor #####################
 
   def __init__(self, imgFn, **kwargs):
@@ -80,7 +95,6 @@ class pxImagePlaneGrid(pxNode):
             (self.rows, self.cols))
       return None
     
-    self.rowSeparators       = {}
     self.rowImagePlaneArrays = {}
 
     for i in self.rows:
