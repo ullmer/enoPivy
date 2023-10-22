@@ -34,7 +34,10 @@ class pxImagePlane(pxNode):
 
   #################### constructor #####################
 
-  def __init__(self, imgFn):
+  def __init__(self, imgFn, **kwargs):
+    self.__dict__.update(kwargs) #allow class fields to be passed in constructor
+    #https://stackoverflow.com/questions/739625/setattr-with-kwargs-pythonic-or-not
+
     self.buildImagePlane(imgFn)
 
   #################### build Image Plane #####################
@@ -59,6 +62,10 @@ class pxImagePlane(pxNode):
 
     return self.node
 
+#################################################################
+#################### Enodia Coin ImagePlane Grid ################
+
+
 ################################################################
 #################### Enodia Coin translate #####################
 
@@ -69,8 +76,11 @@ class pxTranslate(pxNode):
   
   #################### constructor #####################
 
-  def __init__(self, translateVal, translatedNode):
-    self.buildTranslate(translateVal, translatedNode)
+  def __init__(self, imgFn, **kwargs):
+    self.__dict__.update(kwargs) #allow class fields to be passed in constructor
+    #https://stackoverflow.com/questions/739625/setattr-with-kwargs-pythonic-or-not
+
+    self.buildTranslate(self.translateVal, self.translatedNode)
 
   #################### constructor #####################
 
