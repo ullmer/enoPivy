@@ -66,6 +66,32 @@ class pxImagePlaneArray (pxNode):
     super().__init__(kwargs)
 
     if self.cols not None and self.autobuild:
+      self.buildArray()
+
+  #################### build array #####################
+
+  def buildArray(self):
+    if self.rows not None: 
+      print("pivyXi pxImagePlaneArray: cols need vals (%s)" % self.cols)
+      return None
+    
+    self.rowImagePlaneArrays = {}
+
+    for i in self.rows:
+      rowSep = new coin.SoSeparator()
+      self.rowSeparators[i] = rowSep
+      self.rowImagePlaneArrays = {}
+
+      for j in self.cols:
+        imgPlane = pxImagePlane() 
+        
+        
+    
+    children  = [self.imgTexture, self.imgCoord, self.faceset] 
+
+    for child in children: self.node.addChild(child)
+
+### end ###
 
 #################################################################
 ################# Enodia Coin ImagePlane Grid (2D) ##############
