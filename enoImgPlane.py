@@ -8,7 +8,7 @@ from enoPivy import *
 #################################################################
 #################### Enodia Coin ImagePlane #####################
 
-class pxImagePlane(pxNode):
+class enoImagePlane(pxNode):
   imgTexture     = None
   faceset        = None
   imgFn          = None
@@ -27,20 +27,19 @@ class pxImagePlane(pxNode):
 
   #################### constructor #####################
 
-  def __init__(self, imgFn, **kwargs):
+  def __init__(self, **kwargs):
     super().__init__(kwargs)
 
-    self.buildImagePlane(imgFn)
+    self.buildImagePlane()
 
   #################### build Image Plane #####################
 
-  def buildImagePlane(self, imgFn):
+  def buildImagePlane(self):
 
-    self.imgFn                 = imgFn
     self.imgTexture            = coin.SoTexture2()
 
-    if imgFn is not None: 
-      self.imgTexture.filename = imgFn
+    if self.imgFn is not None: 
+      self.imgTexture.filename = self.imgFn
 
     if self.transparency != 0:
       self.
@@ -65,7 +64,7 @@ class pxImagePlane(pxNode):
 #################################################################
 ################# Enodia Coin ImagePlane Array (1D) #############
 
-class pxImagePlaneArray(pxNode):
+class enoImagePlaneArray(pxNode):
   cols       = None
   autobuild  = True
   offset     = [1.1, 0, 0]
@@ -74,7 +73,7 @@ class pxImagePlaneArray(pxNode):
   
   #################### constructor #####################
 
-  def __init__(self, imgFn, **kwargs):
+  def __init__(self, **kwargs):
     super().__init__(kwargs)
 
     if self.cols not None and self.autobuild:
@@ -84,14 +83,14 @@ class pxImagePlaneArray(pxNode):
 
   def buildArray(self):
     if self.rows not None: 
-      print("enoPivy pxImagePlaneArray: cols need vals (%s)" % self.cols)
+      print("enoPivy enoImagePlaneArray: cols need vals (%s)" % self.cols)
       return None
     
     self.imgPlanes  = {}
     self.planeTrans = {}
 
     for i in self.cols:
-      imgPlane = pxImagePlane() 
+      imgPlane = enoImagePlane() 
       imgNode  = imgPlane.getNode()
       imgTrans = coin.SbVec3f(self.offset)
 
@@ -104,46 +103,48 @@ class pxImagePlaneArray(pxNode):
 #################################################################
 ################# Enodia Coin ImagePlane Grid (2D) ##############
 
-class pxImagePlaneGrid(pxNode):
+class enoImagePlaneGrid(pxNode):
   rows      = None
   cols      = None
   autobuild = True
   xoffset   = 1.1 
   yoffset   = 1.1
+  offset    = [0, 1.1, 0]
 
   rowImagePlaneArrays = None
+  rowTrans            = None
 
   #################### constructor #####################
 
-  def __init__(self, imgFn, **kwargs):
+  def __init__(self, **kwargs):
     super().__init__(kwargs)
 
     if self.rows not None and self.cols not None and self.autobuild:
-      self.buildGrid()
+      self.buildGrid(kwargs)
   
   #################### build grid #####################
 
-  def buildGrid(self):
+  def buildGrid(self, **kwargs):
     if self.rows not None or self.cols not None:
-      print("enoPivy pxImagePlaneGrid: rows and/or cols need vals (%s, %s)" % 
+      print("enoPivy enoImagePlaneGrid: rows and/or cols need vals (%s, %s)" % 
             (self.rows, self.cols))
       return None
     
     self.rowImagePlaneArrays = {}
+    self.rowTrans            = {}
 
-    for i in self.rows:
-      rowSep = new coin.SoSeparator()
-      self.rowSeparators[i] = rowSep
-      self.rowImagePlaneArrays = {}
+    for j in self.rows:
+      imgPlaneArray = enoImagePlaneArray(kwargs) 
+      self.rowImagePlaneArrays[j] = imgPlaneArray  
 
-      for j in self.cols:
-        imgPlane = pxImagePlane() 
-        
-        
+      arrayNode = imgPlaneArray.getNode()
+      rowTrans  = coin.SbVec3f(self.offset)
+
+      if i != 0: self.addChild(rowTrans)
+      self.addChild(arrayNode)
+
+      self.rowImagePlaneArrays [i] = imgPlaneArray
+      self.rowTrans[i]             = rowTrans
     
-    children  = [self.imgTexture, self.imgCoord, self.faceset] 
-
-    for child in children: self.node.addChild(child)
-
 ### end ###
 
