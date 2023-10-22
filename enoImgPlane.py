@@ -104,7 +104,7 @@ class enoImagePlaneArray(pxNode):
         self.imgPlanes[i] = imgPlane
         self.imgTrans[i]  = imgTrans
     except:
-      print("enoImagePlane buildArray exception:"); traceback.print_exc()
+      print("enoImageArray buildArray exception:"); traceback.print_exc()
       return False
 
 #################################################################
@@ -132,26 +132,30 @@ class enoImagePlaneGrid(pxNode):
   #################### build grid #####################
 
   def buildGrid(self, **kwargs):
-    if self.rows not None or self.cols not None:
-      print("enoPivy enoImagePlaneGrid: rows and/or cols need vals (%s, %s)" % 
-            (self.rows, self.cols))
-      return None
-    
-    self.rowImagePlaneArrays = {}
-    self.rowTrans            = {}
-
-    for j in self.rows:
-      imgPlaneArray = enoImagePlaneArray(kwargs) 
-      self.rowImagePlaneArrays[j] = imgPlaneArray  
-
-      arrayNode = imgPlaneArray.getNode()
-      rowTrans  = coin.SbVec3f(self.offset)
-
-      if i != 0: self.addChild(rowTrans)
-      self.addChild(arrayNode)
-
-      self.rowImagePlaneArrays [i] = imgPlaneArray
-      self.rowTrans[i]             = rowTrans
+    try:
+      if self.rows not None or self.cols not None:
+        print("enoPivy enoImagePlaneGrid: rows and/or cols need vals (%s, %s)" % 
+              (self.rows, self.cols))
+        return None
+      
+      self.rowImagePlaneArrays = {}
+      self.rowTrans            = {}
+  
+      for j in self.rows:
+        imgPlaneArray = enoImagePlaneArray(kwargs) 
+        self.rowImagePlaneArrays[j] = imgPlaneArray  
+  
+        arrayNode = imgPlaneArray.getNode()
+        rowTrans  = coin.SbVec3f(self.offset)
+  
+        if i != 0: self.addChild(rowTrans)
+        self.addChild(arrayNode)
+  
+        self.rowImagePlaneArrays [i] = imgPlaneArray
+        self.rowTrans[i]             = rowTrans
+    except:
+      print("enoImageGrid buildGrid exception:"); traceback.print_exc()
+      return False
     
 ### end ###
 
