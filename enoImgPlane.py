@@ -15,6 +15,7 @@ class pxImagePlane(pxNode):
   imgCoord       = None
   normalObj      = None
   normal         = [0, 0, 1.]
+  transparency   = 0
 
   #textureModel   = 'BLEND'
   textureModel   = 'MODULATE'
@@ -40,6 +41,10 @@ class pxImagePlane(pxNode):
 
     if imgFn is not None: 
       self.imgTexture.filename = imgFn
+
+    if self.transparency != 0:
+      self.
+
     self.imgTexture.model      = self.textureModel
 
     self.imgCoord              = coin.SoCoordinate3()
